@@ -3,9 +3,11 @@ package kt.exercise.myoauth.services.impl;
 import kt.exercise.myoauth.model.entity.Member;
 import kt.exercise.myoauth.repository.MemberRepository;
 import kt.exercise.myoauth.services.MemberService;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +24,8 @@ public class MemberServiceImpl implements MemberService {
 
     //유저 정보 불러오기
     public Optional<Member> selectUserInfo() throws Exception{
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userEmail = authentication.getPrincipal().getClass().getName();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userEmail = ((UserDetails) principal).getUsername();
         Optional<Member> Member = memberRepository.findByEmail(userEmail);
 
         return Member;
@@ -34,4 +36,11 @@ public class MemberServiceImpl implements MemberService {
         member.setPassword(passwordEncoder.encode(member.getPassword()));
         return memberRepository.save(member);
     }
+
+    @Override
+    public void deleteAll() throws Exception {
+        memberRepository.deleteAll();
+    }
+
+
 }

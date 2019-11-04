@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 @Configuration
 @EnableWebSecurity
@@ -26,11 +27,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     UserService userService;
-
-    @Bean
-    public TokenStore tokenStore() {
-        return new InMemoryTokenStore();
-    }
 
     @Bean
     @Override
@@ -46,8 +42,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().mvcMatchers("/docs/index.html");
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-        ;
+        web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/configuration/security",
+                "/swagger-resources", "/webjars/**", "/swagger/**", "/swagger-ui.html");
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/oauth/token").permitAll();
     }
 }

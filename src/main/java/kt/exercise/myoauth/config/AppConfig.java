@@ -5,6 +5,7 @@ import kt.exercise.myoauth.model.MemberRole;
 import kt.exercise.myoauth.model.entity.Member;
 import kt.exercise.myoauth.services.MemberService;
 import kt.exercise.myoauth.services.UserService;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -37,6 +38,9 @@ public class AppConfig {
 
             @Override
             public void run(ApplicationArguments args) throws Exception {
+
+                memberService.deleteAll();
+
                 Set<MemberRole> kitaeRole = new HashSet<>();
                 kitaeRole.add(MemberRole.USER);
 
