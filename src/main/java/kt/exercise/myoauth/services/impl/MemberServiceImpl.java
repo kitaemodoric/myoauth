@@ -24,8 +24,8 @@ public class MemberServiceImpl implements MemberService {
 
     //유저 정보 불러오기
     public Optional<Member> selectUserInfo() throws Exception{
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String userEmail = ((UserDetails) principal).getUsername();
+        String userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //String userEmail = ((UserDetails) principal).getUsername();
         Optional<Member> Member = memberRepository.findByEmail(userEmail);
 
         return Member;
