@@ -92,8 +92,14 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     }
 
     @Bean
+    @Primary
+    public JdbcClientDetailsService JdbcClientDetailsService(DataSource dataSource) {
+        return new JdbcClientDetailsService(dataSource);
+    }
+
+    @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
-        final JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
         converter.setSigningKey("jwt");
         return converter;
     }

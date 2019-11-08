@@ -39,10 +39,5 @@ public class UserService implements UserDetailsService {
                 .map(r -> new SimpleGrantedAuthority("ROLE_" + r.name()))
                 .collect(Collectors.toSet());
     }
-
-    public Member saveMember(Member member) throws Exception {
-        member.setPassword(passwordEncoder.encode(member.getPassword()));
-        return memberRepository.save(member);
-    }
 }
 
